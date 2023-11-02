@@ -3,7 +3,7 @@ import time
 import matplotlib.pyplot as plt
 import pandas as pd
 
-# function to displa devices
+# function to display devices
 def list_devices():
     rm = pyvisa.ResourceManager("@py")
     ports = rm.list_resources()
