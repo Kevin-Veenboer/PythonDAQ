@@ -54,9 +54,9 @@ class ArduinoVISADevice:
         if channel not in [1, 2]:
             print("Available channels are 1 and 2!")
         elif channel == 1:
-            return int(device.query("MEAS:CH1?"))
+            return int(self.device.query("MEAS:CH1?"))
         else:
-            return int(device.query("MEAS:CH1?"))
+            return int(self.device.query("MEAS:CH1?"))
 
 
 # Defining storage path for data
