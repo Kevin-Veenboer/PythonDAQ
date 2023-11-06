@@ -23,6 +23,17 @@ class ArduinoVISADevice:
     def get_identification(self) -> None:
         print(self.device.query("*IDN?"))
 
+    # Defining conversion functions
+    def convert_Analog_Digital(value):
+        steps = 1023
+        step_value = 3.3 / steps
+        return round(float(value) / step_value)
+
+    def convert_Digital_Analog(value):
+        steps = 1023
+        step_value = 3.3 / steps
+        return round(float(value) * step_value, 2)
+
     # Method to set output values (0-1023 input expected)
     def set_output_value(self, value) -> None:
         self.device.query(f"OUT:CH0 {value}")
@@ -34,10 +45,18 @@ class ArduinoVISADevice:
             return 0
         return self.CH0_value
 
-    def get_input_value(self, channel) -> int:
+    def get_input_value(self, channel, output="Analog") -> float:
         if channel not in [1, 2]:
             print("Available channels are 1 and 2!")
-        elif channel == 1:
-            return int(self.device.query("MEAS:CH1?"))
+        elif output == "Analog":
+            if channel == 1:
+                return self.convert_Digital_Analog(int(self.device.query("MEAS:CH1?")))
+            else:
+                return self.convert_Digital_Analog(int(self.device.query("MEAS:CH1?")))
+        elif output == "Digital":
+            if channel == 1:
+                return float(self.device.query("MEAS:CH1?"))
+            else:
+                return float(self.device.query("MEAS:CH1?"))
         else:
-            return int(self.device.query("MEAS:CH1?"))
+            print("Please give a valid output type, measurment set to None")

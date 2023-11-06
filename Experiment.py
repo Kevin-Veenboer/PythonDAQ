@@ -56,14 +56,16 @@ class ArduinoVISADevice:
         elif channel == 1:
             return int(self.device.query("MEAS:CH1?"))
         else:
-            return int(self.device.query("MEAS:CH1?"))
+            return int(self.device.query("MEAS:CH2?"))
 
+
+# VIEW thingy
 
 # Defining storage path for data
 path = "C:/Users/12604275/Desktop/ECPC/DataStore/"
 
 
-port = list_devices[0]
+port = list_devices()[0]
 
 Device = ArduinoVISADevice(port=port)
 
@@ -94,14 +96,19 @@ for val in Output_values:
         f"Total: {Total_Voltage}, Resistor: {Resistor_Voltage}, LED: {LED_Voltage}, Current(mV): {round(1000 * (Resistor_Voltage / 220), 2)}"
     )
 
-DF_dict = {
-    "Total Voltage (V)": MeasurementsT,
-    "Resistor Voltage (V)": MeasurementsR,
-    "LED Voltage (V)": MeasurementsL,
-    "Current (mA)": MeasurementsI,
-}
-# storing the data as CSV
-pd.DataFrame(DF_dict).to_csv(path + "ExperimentData.csv")
+# # CSV met pandas library (mocht blijkbaar niet)
+
+# DF_dict = {
+#     "Total Voltage (V)": MeasurementsT,
+#     "Resistor Voltage (V)": MeasurementsR,
+#     "LED Voltage (V)": MeasurementsL,
+#     "Current (mA)": MeasurementsI,
+# }
+# # storing the data as CSV
+# pd.DataFrame(DF_dict).to_csv(path + "ExperimentData.csv")
+
+# data = zip(MeasurementsT)
+
 
 # plotting the result
 plt.plot(MeasurementsL, MeasurementsI, marker="o", linestyle="None")
