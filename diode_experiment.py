@@ -16,7 +16,7 @@ class DiodeExperiment:
         self.Currents_Error = list()
 
     # Method to start an experiment
-    def scan(self, device_range=1024, Resistor_Load=220, sample_size=5) -> list():
+    def scan(self, device_range=1024, Resistor_Load=220, sample_size=5) -> tuple:
         # Make sure to clear the old results first
         self.clear()
 
@@ -72,8 +72,8 @@ class DiodeExperiment:
         self.LED_Voltages.append(LED_U)
         self.LED_Voltages_Error.append(LED_U_err)
 
-    def export_experiment_data(self) -> list:
-        headers = (
+    def export_experiment_data(self) -> tuple:
+        headers = [
             "Total voltage (V)",
             "Total V error",
             "Resistor Voltage (V)",
@@ -83,8 +83,8 @@ class DiodeExperiment:
             "Current (A)",
             "Current error",
             "Resistor load (Ohm)",
-        )
-        data = zip(
+        ]
+        data = [
             self.Total_Voltages,
             self.Total_Voltages_Error,
             self.Resistor_Voltages,
@@ -94,7 +94,7 @@ class DiodeExperiment:
             self.Currents,
             self.Currents_Error,
             self.Resistor_Loads,
-        )
+        ]
 
         return (headers, data)
 
@@ -108,9 +108,3 @@ class DiodeExperiment:
         self.LED_Voltages_Error = list()
         self.Currents = list()
         self.Currents_Error = list()
-
-
-experiment = DiodeExperiment()
-test = experiment.scan()
-print(test)
-print(type(test))

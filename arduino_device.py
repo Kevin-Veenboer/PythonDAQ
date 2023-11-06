@@ -52,7 +52,7 @@ class ArduinoVISADevice:
             if channel == 1:
                 return self.convert_Digital_Analog(int(self.device.query("MEAS:CH1?")))
             else:
-                return self.convert_Digital_Analog(int(self.device.query("MEAS:CH1?")))
+                return self.convert_Digital_Analog(int(self.device.query("MEAS:CH2?")))
         elif output == "Digital":
             if channel == 1:
                 return float(self.device.query("MEAS:CH1?"))
