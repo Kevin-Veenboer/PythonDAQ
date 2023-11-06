@@ -84,7 +84,7 @@ class DiodeExperiment:
             "Current error",
             "Resistor load (Ohm)",
         ]
-        data = [
+        data = zip(
             self.Total_Voltages,
             self.Total_Voltages_Error,
             self.Resistor_Voltages,
@@ -94,7 +94,7 @@ class DiodeExperiment:
             self.Currents,
             self.Currents_Error,
             self.Resistor_Loads,
-        ]
+        )
 
         return (headers, data)
 
