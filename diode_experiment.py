@@ -44,7 +44,7 @@ class DiodeExperiment:
             # Add the measurement
             self.add_Measurement(Resistor_Load, Total_U, Resistor_U, T_U_Err, R_U_Err)
 
-        # Return the experiment data
+        # Return the experiment data as tuple with headers and data
         return self.export_experiment_data()
 
     # Method to add measurement to instance
@@ -69,8 +69,8 @@ class DiodeExperiment:
         LED_U_err = np.sqrt((T_U_Err) ** 2 + (R_U_Err) ** 2)
 
         # Store results
-        self.LED_Voltages(LED_U)
-        self.LED_Voltages_Error(LED_U_err)
+        self.LED_Voltages.append(LED_U)
+        self.LED_Voltages_Error.append(LED_U_err)
 
     def export_experiment_data(self) -> list:
         headers = (
@@ -96,7 +96,7 @@ class DiodeExperiment:
             self.Resistor_Loads,
         )
 
-        return headers + data
+        return (headers, data)
 
     def clear(self):
         self.Resistor_Loads = list()
@@ -113,3 +113,4 @@ class DiodeExperiment:
 experiment = DiodeExperiment()
 test = experiment.scan()
 print(test)
+print(type(test))
