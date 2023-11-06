@@ -24,12 +24,12 @@ class ArduinoVISADevice:
         print(self.device.query("*IDN?"))
 
     # Defining conversion functions
-    def convert_Analog_Digital(value):
+    def convert_Analog_Digital(self, value):
         steps = 1023
         step_value = 3.3 / steps
         return round(float(value) / step_value)
 
-    def convert_Digital_Analog(value):
+    def convert_Digital_Analog(self, value):
         steps = 1023
         step_value = 3.3 / steps
         return round(float(value) * step_value, 2)

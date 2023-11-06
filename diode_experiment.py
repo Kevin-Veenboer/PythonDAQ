@@ -100,9 +100,16 @@ class DiodeExperiment:
 
     def clear(self):
         self.Resistor_Loads = list()
-        self.LED_Loads = list()
         self.Total_Voltages = list()
+        self.Total_Voltages_Error = list()
         self.Resistor_Voltages = list()
+        self.Resistor_Voltages_Error = list()
         self.LED_Voltages = list()
+        self.LED_Voltages_Error = list()
         self.Currents = list()
-        self.LED_Powers = list()
+        self.Currents_Error = list()
+
+
+experiment = DiodeExperiment()
+test = experiment.scan()
+print(test)
