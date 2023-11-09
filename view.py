@@ -7,31 +7,58 @@ import matplotlib.pyplot as plt
 storage_path = "C:/Users/12604275/Desktop/ECPC/DataStore/"
 file_name = f"ExperimentData_{len(listdir(storage_path))}.csv"
 
-Experiment = DiodeExperiment()
-header, data = Experiment.scan()
+experiment = DiodeExperiment()
+header, data = experiment.scan()
 
 # Create lists to extract LED Volt and Current plus their errors
-LED_volt = list()
-LED_volt_err = list()
-Current = list()
-Current_err = list()
+led_volts = list()
+led_volt_errors = list()
+currents = list()
+current_errors = list()
 
 
 # sla de data op als CSV
 with open(storage_path + file_name, "w", newline="") as file:
     writer = csv.writer(file)
     writer.writerow(header)
-    for T_V, T_V_err, R_V, R_V_err, L_V, L_V_err, I, I_err, R in data:
-        writer.writerow([T_V, T_V_err, R_V, R_V_err, L_V, L_V_err, I, I_err, R])
+    for (
+        total_volt,
+        total_volt_resistance,
+        resistor_volt,
+        resistor_volt_resistance,
+        led_volt,
+        led_volt_resistance,
+        current,
+        current_resistance,
+        resistance,
+    ) in data:
+        writer.writerow(
+            [
+                total_volt,
+                total_volt_resistance,
+                resistor_volt,
+                resistor_volt_resistance,
+                led_volt,
+                led_volt_resistance,
+                current,
+                current_resistance,
+                resistance,
+            ]
+        )
 
         # save values to plot later
-        LED_volt.append(L_V)
-        LED_volt_err.append(L_V_err)
-        Current.append(I)
-        Current_err.append(I_err)
+        led_volts.append(led_volt)
+        led_volt_errors.append(led_volt_resistance)
+        currents.append(current)
+        current_errors.append(current_resistance)
 
 # plot de data
 plt.errorbar(
-    LED_volt, Current, xerr=LED_volt_err, yerr=Current_err, linestyle="None", marker="o"
+    led_volts,
+    currents,
+    xerr=led_volt_errors,
+    yerr=current_errors,
+    linestyle="None",
+    marker="o",
 )
 plt.show()
