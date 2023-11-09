@@ -16,20 +16,20 @@ class ArduinoVISADevice:
         )
 
         # Initialize the channel values
-        self.CH0_value = None
-        self.CH1_value = None
-        self.CH2_value = None
+        self.channel_0_value = None
+        self.channel_1_value = None
+        self.channel_2_value = None
 
     def get_identification(self) -> None:
         print(self.device.query("*IDN?"))
 
     # Defining conversion functions
-    def convert_Analog_Digital(self, value):
+    def convert_analog_digital(self, value):
         steps = 1023
         step_value = 3.3 / steps
         return round(float(value) / step_value)
 
-    def convert_Digital_Analog(self, value):
+    def convert_digital_analog(self, value):
         steps = 1023
         step_value = 3.3 / steps
         return round(float(value) * step_value, 2)
@@ -41,22 +41,22 @@ class ArduinoVISADevice:
     # functions to get output value (CH0) or input values (CH1 or CH2)
     def get_output_value(self) -> int:
         # if no value is set then return 0
-        if self.CH0_value == None:
+        if self.channel_0_value == None:
             return 0
-        return self.CH0_value
+        return self.channel_0_value
 
-    def get_input_value(self, channel, output="Analog") -> float:
+    def get_input_value(self, channel) -> float:
         if channel not in [1, 2]:
             print("Available channels are 1 and 2!")
-        elif output == "Analog":
-            if channel == 1:
-                return self.convert_Digital_Analog(int(self.device.query("MEAS:CH1?")))
-            else:
-                return self.convert_Digital_Analog(int(self.device.query("MEAS:CH2?")))
-        elif output == "Digital":
-            if channel == 1:
-                return float(self.device.query("MEAS:CH1?"))
-            else:
-                return float(self.device.query("MEAS:CH1?"))
+        elif channel == 1:
+            return float(self.device.query("MEAS:CH1?"))
         else:
-            print("Please give a valid output type, measurment set to None")
+            return float(self.device.query("MEAS:CH1?"))
+
+    def get_input_voltage(self, channel) -> float:
+        if channel not in [1, 2]:
+            print("Available channels are 1 and 2!")
+        if channel == 1:
+            return self.convert_digital_analog(int(self.device.query("MEAS:CH1?")))
+        else:
+            return self.convert_digital_analog(int(self.device.query("MEAS:CH2?")))

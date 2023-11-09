@@ -11,10 +11,10 @@ experiment = DiodeExperiment()
 header, data = experiment.scan()
 
 # Create lists to extract LED Volt and Current plus their errors
-led_volts = list()
-led_volt_errors = list()
-currents = list()
-current_errors = list()
+led_volts = []
+led_volt_errors = []
+currents = []
+current_errors = []
 
 
 # sla de data op als CSV
