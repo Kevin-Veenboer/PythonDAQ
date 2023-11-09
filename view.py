@@ -1,15 +1,33 @@
 from diode_experiment import DiodeExperiment
 import csv
-from os import listdir
+from os import listdir, path, mkdir
 import matplotlib.pyplot as plt
 
 # File path where the CSV will be saved
 storage_path = "C:/Users/12604275/Desktop/ECPC/DataStore/"
 image_path = "C:/Users/12604275/Desktop/ECPC/ImageStore/"
 
-# Set names for the experiment by checking how many experiments came before
-file_name = f"ExperimentData_{len(listdir(storage_path))}.csv"
-image_name = f"ExperimentPlot_{len(listdir(storage_path))}.jpg"
+# check if given directories exist, if not create them
+if not path.isdir(storage_path):
+    mkdir(storage_path)
+if not path.isdir(image_path):
+    mkdir(image_path)
+
+# Create list to store the iteration numbers
+experiment_iterations = []
+for file in listdir(storage_path):
+    # This is so unusual names do not cause an error
+    try:
+        experiment_iterations.append(int(file[15:-4]))
+    except:
+        pass
+# Sort list and get last number
+experiment_iterations.sort()
+last_experiment_iteration = experiment_iterations[-1]
+
+# Only check the data file so that the saved plots always have the same number
+file_name = f"ExperimentData_{last_experiment_iteration+1}.csv"
+image_name = f"ExperimentPlot_{last_experiment_iteration+1}.jpg"
 
 experiment = DiodeExperiment()
 header, data = experiment.scan()
@@ -70,6 +88,7 @@ plt.errorbar(
     yerr=current_errors,
     linestyle="None",
     marker="o",
+    markersize=3,
 )
 
 # formatting the plot
