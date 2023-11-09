@@ -3,7 +3,7 @@ import csv
 from os import listdir
 import matplotlib.pyplot as plt
 
-# File path waar de CSV opgeslagen wordt
+# File path where the CSV will be saved
 storage_path = "C:/Users/12604275/Desktop/ECPC/DataStore/"
 image_path = "C:/Users/12604275/Desktop/ECPC/ImageStore/"
 
@@ -21,7 +21,7 @@ currents = []
 current_errors = []
 
 
-# sla de data op als CSV
+# save the data as CSV
 with open(storage_path + file_name, "w", newline="") as file:
     writer = csv.writer(file)
 

@@ -1,6 +1,6 @@
 import pyvisa
 
-# function to display devices
+# Function to display devices
 def list_devices():
     rm = pyvisa.ResourceManager("@py")
     ports = rm.list_resources()
@@ -20,6 +20,7 @@ class ArduinoVISADevice:
         self.channel_1_value = None
         self.channel_2_value = None
 
+    # Method to get device identification string
     def get_identification(self) -> None:
         print(self.device.query("*IDN?"))
 
@@ -38,13 +39,14 @@ class ArduinoVISADevice:
     def set_output_value(self, value) -> None:
         self.device.query(f"OUT:CH0 {value}")
 
-    # functions to get output value (CH0) or input values (CH1 or CH2)
+    # Functions to get output value (CH0) or input values (CH1 or CH2)
     def get_output_value(self) -> int:
         # if no value is set then return 0
         if self.channel_0_value == None:
             return 0
         return self.channel_0_value
 
+    # Function to get the value on channel 1 or 2 of the device as a digital value
     def get_input_value(self, channel) -> float:
         if channel not in [1, 2]:
             print("Available channels are 1 and 2!")
@@ -53,6 +55,7 @@ class ArduinoVISADevice:
         else:
             return float(self.device.query("MEAS:CH1?"))
 
+    # Function to get the value on channel 1 or 2 of the device as an analog value
     def get_input_voltage(self, channel) -> float:
         if channel not in [1, 2]:
             print("Available channels are 1 and 2!")

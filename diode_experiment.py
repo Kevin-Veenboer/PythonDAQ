@@ -3,18 +3,10 @@ import numpy as np
 
 
 class DiodeExperiment:
-    # initialize the lists for storing results
+    # Initialize the lists for storing results
     def __init__(self) -> None:
-        # TA said I did not have to use resistor errors
-        self.resistor_loads = []
-        self.total_voltages = []
-        self.total_voltages_errors = []
-        self.resistor_voltages = []
-        self.resistor_voltages_errors = []
-        self.led_voltages = []
-        self.led_voltages_errors = []
-        self.currents = []
-        self.currents_errors = []
+        # Clear method called to initialize the list for storing data
+        self.clear()
 
     # Method to start an experiment
     def scan(self, start=0, stop=1023, resistor_load=220, sample_size=5) -> tuple:
@@ -140,7 +132,7 @@ class DiodeExperiment:
         return (headers, data)
 
     # Method to clear the stored data
-    def clear(self):
+    def clear(self) -> None:
         self.resistor_loads = []
         self.total_voltages = []
         self.total_voltages_errors = []
