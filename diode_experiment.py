@@ -16,22 +16,22 @@ class DiodeExperiment:
         self.currents_errors = []
 
     # Method to start an experiment
-    def scan(self, device_range=1024, resistor_load=220, sample_size=5) -> tuple:
+    def scan(self, start=0, stop=1023, resistor_load=220, sample_size=5) -> tuple:
         # Make sure to clear the old results first
         self.clear()
 
         port = list_devices()[0]
         device = ArduinoVISADevice(port=port)
 
-        for output_val in range(0, device_range):
+        for output_val in range(start, stop):
             device.set_output_value(value=output_val)
 
             measurement_total_volt = []
             measurement_resistor_volt = []
             # Take measurements (take a few to determine the error)
             for _ in range(sample_size):
-                measurement_total_volt.append(device.get_input_value(channel=1))
-                measurement_resistor_volt.append(device.get_input_value(channel=2))
+                measurement_total_volt.append(device.get_input_voltage(channel=1))
+                measurement_resistor_volt.append(device.get_input_voltage(channel=2))
 
             # Calculate the total volt and resister volt
             total_volt = np.mean(measurement_total_volt)
