@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 storage_path = "C:/Users/12604275/Desktop/ECPC/DataStore/"
 image_path = "C:/Users/12604275/Desktop/ECPC/ImageStore/"
 
-# check if given directories exist, if not create them
+# Check if given directories exist, if not create them
 if not path.isdir(storage_path):
     mkdir(storage_path)
 if not path.isdir(image_path):
@@ -29,6 +29,7 @@ last_experiment_iteration = experiment_iterations[-1]
 file_name = f"ExperimentData_{last_experiment_iteration+1}.csv"
 image_name = f"ExperimentPlot_{last_experiment_iteration+1}.jpg"
 
+# Initialize model and run experiment
 experiment = DiodeExperiment()
 header, data = experiment.scan()
 
