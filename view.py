@@ -3,9 +3,9 @@ import csv
 from os import listdir, path, mkdir
 import matplotlib.pyplot as plt
 
-# File path where the CSV will be saved
-storage_path = "C:/Users/12604275/Desktop/ECPC/DataStore/"
-image_path = "C:/Users/12604275/Desktop/ECPC/ImageStore/"
+# File path where the CSV will be saved / THESE NEED TO BE CHANGED TO WORK ON OTHER DEVICES!
+storage_path = "C:/Users/12604275/Documents/GitHub/PythonDAQ/DataStore/"
+image_path = "C:/Users/12604275/Documents/GitHub/PythonDAQ/ImageStore/"
 
 # Check if given directories exist, if not create them
 if not path.isdir(storage_path):
