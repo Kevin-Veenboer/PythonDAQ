@@ -8,13 +8,13 @@ storage_path = "C:/Users/12604275/Desktop/ECPC/DataStore/"
 file_name = f"ExperimentData_{len(listdir(storage_path))}.csv"
 
 Experiment = DiodeExperiment()
-Data = Experiment.scan()
+Header, Data = Experiment.scan()
 
 # sla de data op als CSV
 with open(storage_path + file_name, "w", newline="") as file:
     writer = csv.writer(file)
-    writer.writerow(Data[0])
-    for T_V, T_V_err, R_V, R_V_err, L_V, L_V_err, I, I_err, R in Data[1]:
+    writer.writerow(Header)
+    for T_V, T_V_err, R_V, R_V_err, L_V, L_V_err, I, I_err, R in Data:
         writer.writerow([T_V, T_V_err, R_V, R_V_err, L_V, L_V_err, I, I_err, R])
 
 # Extract LED Volt and Current plus their errors

@@ -56,7 +56,7 @@ class DiodeExperiment:
         self.Total_Voltages.append(Total_U)
         self.Total_Voltages_Error.append(T_U_Err)
         self.Resistor_Voltages.append(Resistor_U)
-        self.Resistor_Voltages.append(R_U_Err)
+        self.Resistor_Voltages_Error.append(R_U_Err)
 
         # Calculate the current with voltage/load and store the result
         circuit_current = Resistor_U / R
@@ -95,7 +95,7 @@ class DiodeExperiment:
             self.Currents_Error,
             self.Resistor_Loads,
         )
-
+        print(self.LED_Voltages)
         return (headers, data)
 
     def clear(self):
