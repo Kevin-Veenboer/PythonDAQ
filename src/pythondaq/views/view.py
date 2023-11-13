@@ -1,11 +1,11 @@
 from pythondaq.models.diode_experiment import DiodeExperiment
 import csv
-from os import listdir, path, mkdir
+from os import listdir, path, mkdir, getcwd
 import matplotlib.pyplot as plt
 
-# File path where the CSV will be saved / THESE NEED TO BE CHANGED TO WORK ON OTHER DEVICES!
-storage_path = "C:/Users/12604275/Documents/GitHub/PythonDAQ/DataStore/"
-image_path = "C:/Users/12604275/Documents/GitHub/PythonDAQ/ImageStore/"
+# File path where the CSV will be saved (getcwd() is used to get the current working directory)
+storage_path = f"{getcwd()}/DataStore/"
+image_path = f"{getcwd()}/ImageStore/"
 
 
 def main():

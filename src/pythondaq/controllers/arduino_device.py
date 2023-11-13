@@ -42,9 +42,7 @@ class ArduinoVISADevice:
     # Functions to get output value (CH0) or input values (CH1 or CH2)
     def get_output_value(self) -> int:
         # if no value is set then return 0
-        if self.channel_0_value == None:
-            return 0
-        return self.channel_0_value
+        return self.device.query(f"OUT:CH0?")
 
     # Function to get the value on channel 1 or 2 of the device as a digital value
     def get_input_value(self, channel) -> float:

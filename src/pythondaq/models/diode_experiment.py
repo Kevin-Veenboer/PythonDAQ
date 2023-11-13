@@ -56,6 +56,8 @@ class DiodeExperiment:
                 total_volt_error,
                 resistor_volt_error,
             )
+        # After the experiment we turn the LED off
+        device.set_output_value(value=0)
 
         # Return the experiment data
         return self.export_experiment_data()
