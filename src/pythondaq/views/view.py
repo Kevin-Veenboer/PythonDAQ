@@ -1,4 +1,4 @@
-from diode_experiment import DiodeExperiment
+from pythondaq.models.diode_experiment import DiodeExperiment
 import csv
 from os import listdir, path, mkdir
 import matplotlib.pyplot as plt
