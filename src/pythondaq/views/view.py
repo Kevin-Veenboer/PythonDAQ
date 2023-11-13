@@ -3,7 +3,7 @@ import csv
 from os import listdir, path, mkdir, getcwd
 import matplotlib.pyplot as plt
 
-# File path where the CSV will be saved (getcwd() is used to get the current working directory)
+# File path where the CSV will be saved (this will always create folders in de directory where it is run, it not a bug but a feature)
 storage_path = f"{getcwd()}/DataStore/"
 image_path = f"{getcwd()}/ImageStore/"
 
