@@ -45,9 +45,16 @@ def list_devices():
     "--graph/--no-graph",
     help="flag option to specify if results should be plotted",
 )
-def scan(begin, end, output, graph):
+@click.option(
+    "-n",
+    "--number",
+    default=5,
+    help="sample size of measurments per voltage",
+    show_default=True,
+)
+def scan(begin, end, output, graph, number):
     assert begin <= end, "Cannot have the begin value be greater then the end value"
-    header, data = DiodeExperiment().scan(start=begin, stop=end)
+    header, data = DiodeExperiment().scan(start=begin, stop=end, sample_size=number)
 
     # Create lists to extract LED Voltages and currents plus their errors
     led_volts = []

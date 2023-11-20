@@ -46,10 +46,16 @@ class DiodeExperiment:
             total_volt = np.mean(measurement_total_volt)
             resistor_volt = np.mean(measurement_resistor_volt)
 
-            # Note standard error = standard deviation / sqrt(sample_size)
-            total_volt_error = np.std(measurement_total_volt) / np.sqrt(sample_size)
-            resistor_volt_error = np.std(measurement_resistor_volt) / np.sqrt(
-                sample_size
+            # Note standard error = standard deviation / sqrt(sample_size), if sample_size is 1 no errors can be determined
+            total_volt_error = (
+                np.std(measurement_total_volt) / np.sqrt(sample_size)
+                if sample_size > 1
+                else 0
+            )
+            resistor_volt_error = (
+                np.std(measurement_resistor_volt) / np.sqrt(sample_size)
+                if sample_size > 1
+                else 0
             )
 
             # save the measurement
