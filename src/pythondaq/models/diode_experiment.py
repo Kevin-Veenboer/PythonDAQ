@@ -27,8 +27,12 @@ class DiodeExperiment:
         port = list_devices()[0]
         device = ArduinoVISADevice(port=port)
 
+        # start / stop are given in analog, convert this to digital first
+        start_digital = device.convert_analog_digital(start)
+        stop_digital = device.convert_analog_digital(stop)
+
         # scan across the given experiment range
-        for output_val in range(start, stop + 1):
+        for output_val in range(start_digital, stop_digital + 1):
             device.set_output_value(value=output_val)
 
             measurement_total_volt = []
