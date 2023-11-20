@@ -70,6 +70,7 @@ def info(port):
 )
 def scan(port, begin, end, output, graph, number):
     assert begin <= end, "Cannot have the begin value be greater then the end value"
+    assert number > 0, "Cannot have a sample size of less then one"
     header, data = DiodeExperiment().scan(
         port=port, start=begin, stop=end, sample_size=number
     )
@@ -120,6 +121,7 @@ def scan(port, begin, end, output, graph, number):
             plt.xlabel("LED volage (V)", fontsize=14)
             plt.ylabel("LED current (A)", fontsize=14)
             plt.tight_layout()
+            plt.show()
 
     else:
         with open(output, "w", newline="") as file:
@@ -185,6 +187,7 @@ def scan(port, begin, end, output, graph, number):
             plt.xlabel("LED volage (V)", fontsize=14)
             plt.ylabel("LED current (A)", fontsize=14)
             plt.tight_layout()
+            plt.show()
 
     return
 
