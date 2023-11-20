@@ -17,6 +17,21 @@ def list_devices():
 
 
 @cmd_group.command()
+@click.option(
+    "-p",
+    "--port",
+    default=None,
+    help="port of the device from whihc info is requested",
+    show_default=None,
+)
+def info(port):
+    if not port:
+        print("No device port was given")
+    else:
+        DiodeExperiment().device_info(port=port)
+
+
+@cmd_group.command()
 @click.argument("port")
 @click.option(
     "-b",

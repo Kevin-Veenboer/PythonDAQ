@@ -8,6 +8,9 @@ class DiodeExperiment:
         # Clear method called to initialize the list for storing data
         self.clear()
 
+    def device_info(self, port):
+        return ArduinoVISADevice(port=port).get_identification()
+
     # Method to start an experiment
     def scan(
         self, port, start=0.0, stop=3.3, resistor_load=220, sample_size=5
