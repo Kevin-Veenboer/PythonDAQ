@@ -102,7 +102,24 @@ def scan(port, begin, end, output, graph, number):
         print(currents)
 
         if graph:
-            pass
+            # plotting the data
+            plt.errorbar(
+                led_volts,
+                currents,
+                xerr=led_volt_errors,
+                yerr=current_errors,
+                linestyle="None",
+                marker="o",
+                markersize=3,
+            )
+
+            # formatting the plot
+            plt.xlim(0, 3)
+            plt.ylim(0, 0.003)
+            plt.title("U,I-characteristic plot for an LED", fontsize=17)
+            plt.xlabel("LED volage (V)", fontsize=14)
+            plt.ylabel("LED current (A)", fontsize=14)
+            plt.tight_layout()
 
     else:
         with open(output, "w", newline="") as file:
@@ -150,7 +167,24 @@ def scan(port, begin, end, output, graph, number):
         print(currents)
 
         if graph:
-            pass
+            # plotting the data
+            plt.errorbar(
+                led_volts,
+                currents,
+                xerr=led_volt_errors,
+                yerr=current_errors,
+                linestyle="None",
+                marker="o",
+                markersize=3,
+            )
+
+            # formatting the plot
+            plt.xlim(0, 3)
+            plt.ylim(0, 0.003)
+            plt.title("U,I-characteristic plot for an LED", fontsize=17)
+            plt.xlabel("LED volage (V)", fontsize=14)
+            plt.ylabel("LED current (A)", fontsize=14)
+            plt.tight_layout()
 
     return
 
