@@ -12,8 +12,7 @@ def cmd_group():
 
 @cmd_group.command(name="list")
 def list_devices():
-    print("test")
-    return
+    return DiodeExperiment().get_connected_devices()
 
 
 @cmd_group.command()

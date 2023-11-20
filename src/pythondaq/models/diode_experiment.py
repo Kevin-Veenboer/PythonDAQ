@@ -11,6 +11,9 @@ class DiodeExperiment:
     def device_info(self, port):
         return ArduinoVISADevice(port=port).get_identification()
 
+    def get_connected_devices(self):
+        return list_devices()
+
     # Method to start an experiment
     def scan(
         self, port, start=0.0, stop=3.3, resistor_load=220, sample_size=5
