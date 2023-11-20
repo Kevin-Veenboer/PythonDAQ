@@ -101,8 +101,9 @@ def scan(port, begin, end, output, graph, number):
     assert begin <= end, "Cannot have the begin value be greater then the end value"
     assert number > 0, "Cannot have a sample size of less then one"
 
+    # This uses the searh functionality of the list function to match incomplete port inputs
     ports = list_devices(port)
-    assert len(ports) < 2, "More than one device matches the given port value"
+    assert len(ports) < 2, f"More than one device matches the given port value: {ports}"
     assert len(ports) > 0, "No devices match the given port value"
     port = ports.pop()
 
