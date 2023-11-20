@@ -28,7 +28,7 @@ def list_devices():
 @click.option(
     "-e",
     "--end",
-    default=0,
+    default=3.3,
     type=click.FloatRange(0, 3.3),
     help="Voltage where scan should end",
     show_default=True,
@@ -47,7 +47,7 @@ def list_devices():
 )
 def scan(begin, end, output, graph):
     assert begin <= end, "Cannot have the begin value be greater then the end value"
-    data, header = DiodeExperiment().scan(start=begin, stop=end)
+    header, data = DiodeExperiment().scan(start=begin, stop=end)
 
     # Create lists to extract LED Voltages and currents plus their errors
     led_volts = []
@@ -56,9 +56,19 @@ def scan(begin, end, output, graph):
     current_errors = []
 
     if not output:
-        for _, _, _, _, led_volt, led_volt_error, current, current_error, _ in data:
+        for (
+            total_volt,
+            total_volt_error,
+            resistor_volt,
+            resistor_volt_error,
+            led_volt,
+            led_volt_error,
+            current,
+            current_error,
+            resistance,
+        ) in data:
             led_volts.append(led_volt)
-            led_volt_errors(led_volt_error)
+            led_volt_errors.append(led_volt_error)
             currents.append(current)
             current_errors.append(current_error)
 

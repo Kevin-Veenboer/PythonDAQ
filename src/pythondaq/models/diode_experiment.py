@@ -9,7 +9,7 @@ class DiodeExperiment:
         self.clear()
 
     # Method to start an experiment
-    def scan(self, start=0, stop=1023, resistor_load=220, sample_size=5) -> tuple:
+    def scan(self, start=0.0, stop=3.3, resistor_load=220, sample_size=5) -> tuple:
         """
         This function is used to start a U,I-experiment with the LED. It makes sure to clear the old data and connects to the experiment controller.
         It will scan over the entire range given with the start and stop parameters. For each value in this range it will take a sample.
