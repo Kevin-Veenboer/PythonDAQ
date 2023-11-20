@@ -18,6 +18,10 @@ def cmd_group():
     help="only return devices which match with given search value",
     show_default=True,
 )
+def click_list(search):
+    list_devices(search)
+
+
 def list_devices(search):
     if not search:
         print(DiodeExperiment().get_connected_devices())
@@ -36,14 +40,14 @@ def list_devices(search):
     "-p",
     "--port",
     default=None,
-    help="port of the device from whihc info is requested",
+    help="port of the device from which info is requested",
     show_default=None,
 )
 def info(port):
-    ports = list_devices(port)
-    assert len(ports) < 2, "More than one device matches the given port value"
-    assert len(ports) > 0, "No devices match the given port value"
-    port = ports.pop()
+    # ports = list_devices(port)
+    # assert len(ports) < 2, "More than one device matches the given port value"
+    # assert len(ports) > 0, "No devices match the given port value"
+    # port = ports.pop()
 
     if not port:
         print("No device port was given")
@@ -52,7 +56,6 @@ def info(port):
 
 
 @cmd_group.command()
-@click.argument("port")
 @click.option(
     "-b",
     "--begin",
@@ -88,14 +91,15 @@ def info(port):
     help="sample size of measurments per voltage",
     show_default=True,
 )
+@click.argument("port", type=str)
 def scan(port, begin, end, output, graph, number):
     assert begin <= end, "Cannot have the begin value be greater then the end value"
     assert number > 0, "Cannot have a sample size of less then one"
 
-    ports = list_devices(port)
-    assert len(ports) < 2, "More than one device matches the given port value"
-    assert len(ports) > 0, "No devices match the given port value"
-    port = ports.pop()
+    # ports = list_devices(port)
+    # assert len(ports) < 2, "More than one device matches the given port value"
+    # assert len(ports) > 0, "No devices match the given port value"
+    # port = ports.pop()
 
     header, data = DiodeExperiment().scan(
         port=port, start=begin, stop=end, sample_size=number
