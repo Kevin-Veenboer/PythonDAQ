@@ -10,9 +10,10 @@ def cmd_group():
     pass
 
 
-@cmd_group.command("list")
+@cmd_group.command(name="list")
 def list_devices():
-    pass
+    print("test")
+    return
 
 
 @cmd_group.command()
