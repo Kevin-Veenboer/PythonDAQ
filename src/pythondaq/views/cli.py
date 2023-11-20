@@ -11,8 +11,22 @@ def cmd_group():
 
 
 @cmd_group.command(name="list")
-def list_devices():
-    return DiodeExperiment().get_connected_devices()
+@click.option(
+    "-s",
+    "--search",
+    default=None,
+    help="only return devices which match with given search value",
+    show_default=True,
+)
+def list_devices(search):
+    if not search:
+        return DiodeExperiment().get_connected_devices()
+    else:
+        matching = []
+        for device in DiodeExperiment().get_connected_devices():
+            if search in device:
+                matching.append(device)
+        return matching
 
 
 @cmd_group.command()
