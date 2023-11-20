@@ -26,8 +26,10 @@ def main():
     # Sort list and get last number
     experiment_iterations.sort()
 
-    #if there are no previous iteration set value to -1 (then suffix becomes 0)
-    last_experiment_iteration = experiment_iterations[-1] if len(experiment_iterations) != 0 else -1
+    # if there are no previous iteration set value to -1 (then suffix becomes 0)
+    last_experiment_iteration = (
+        experiment_iterations[-1] if len(experiment_iterations) != 0 else -1
+    )
 
     # Only check the data file so that the saved plots always have the same number
     file_name = f"ExperimentData_{last_experiment_iteration+1}.csv"
@@ -78,7 +80,7 @@ def main():
                 ]
             )
 
-            # save values to plot later
+            # save values to plot/print later
             led_volts.append(led_volt)
             led_volt_errors.append(led_volt_resistance)
             currents.append(current)
