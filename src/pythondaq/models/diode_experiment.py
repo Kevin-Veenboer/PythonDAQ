@@ -10,7 +10,7 @@ class DiodeExperiment:
 
     # Method to start an experiment
     def scan(
-        self, start=0.0, stop=3.3, resistor_load=220, sample_size=5, port="ASRL5::INSTR"
+        self, port, start=0.0, stop=3.3, resistor_load=220, sample_size=5
     ) -> tuple:
         """
         This function is used to start a U,I-experiment with the LED. It makes sure to clear the old data and connects to the experiment controller.

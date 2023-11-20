@@ -17,6 +17,7 @@ def list_devices():
 
 
 @cmd_group.command()
+@click.argument("port")
 @click.option(
     "-b",
     "--begin",
@@ -52,9 +53,11 @@ def list_devices():
     help="sample size of measurments per voltage",
     show_default=True,
 )
-def scan(begin, end, output, graph, number):
+def scan(port, begin, end, output, graph, number):
     assert begin <= end, "Cannot have the begin value be greater then the end value"
-    header, data = DiodeExperiment().scan(start=begin, stop=end, sample_size=number)
+    header, data = DiodeExperiment().scan(
+        port=port, start=begin, stop=end, sample_size=number
+    )
 
     # Create lists to extract LED Voltages and currents plus their errors
     led_volts = []

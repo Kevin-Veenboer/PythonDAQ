@@ -37,7 +37,7 @@ def main():
 
     # Initialize model and run experiment
     experiment = DiodeExperiment()
-    header, data = experiment.scan()
+    header, data = experiment.scan(port="ASRL5::INSTR")
 
     # Create lists to extract LED Volt and Current plus their errors
     led_volts = []
