@@ -120,11 +120,12 @@ def scan(begin, end, output, graph):
                 currents.append(current)
                 current_errors.append(current_error)
 
-                # write the header into the file first
-                writer.writerow(header)
+        # print the lists containing the data
+        print(led_volts)
+        print(currents)
 
-                if graph:
-                    pass
+        if graph:
+            pass
 
     return
 
