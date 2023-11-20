@@ -20,13 +20,15 @@ def cmd_group():
 )
 def list_devices(search):
     if not search:
-        return DiodeExperiment().get_connected_devices()
+        print(DiodeExperiment().get_connected_devices())
+        return
     else:
         matching = []
         for device in DiodeExperiment().get_connected_devices():
             if search in device:
                 matching.append(device)
-        return matching
+        print(matching)
+        return
 
 
 @cmd_group.command()
@@ -38,6 +40,11 @@ def list_devices(search):
     show_default=None,
 )
 def info(port):
+    ports = list_devices(port)
+    assert len(ports) < 2, "More than one device matches the given port value"
+    assert len(ports) > 0, "No devices match the given port value"
+    port = ports.pop()
+
     if not port:
         print("No device port was given")
     else:
@@ -84,6 +91,12 @@ def info(port):
 def scan(port, begin, end, output, graph, number):
     assert begin <= end, "Cannot have the begin value be greater then the end value"
     assert number > 0, "Cannot have a sample size of less then one"
+
+    ports = list_devices(port)
+    assert len(ports) < 2, "More than one device matches the given port value"
+    assert len(ports) > 0, "No devices match the given port value"
+    port = ports.pop()
+
     header, data = DiodeExperiment().scan(
         port=port, start=begin, stop=end, sample_size=number
     )
