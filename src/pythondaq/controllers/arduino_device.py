@@ -35,7 +35,7 @@ class ArduinoVISADevice:
         # If the request is made to a device which does not support this query then handle the error
         except pyvisa.errors.VisaIOError:
             print(
-                "The device at the given port does not respond to this query please try anoher port"
+                "The device at the given port does not respond to this query please try another port"
             )
 
     def convert_analog_digital(self, value):
