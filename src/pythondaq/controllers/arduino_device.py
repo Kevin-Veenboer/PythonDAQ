@@ -22,7 +22,12 @@ class ArduinoVISADevice:
 
     # Method to get device identification string
     def get_identification(self) -> None:
-        print(self.device.query("*IDN?"))
+        try:
+            print(self.device.query("*IDN?"))
+        except pyvisa.errors.VisaIOError():
+            print(
+                "The device at the given port does not respond to this query please try anoher port"
+            )
 
     # Defining conversion functions
     def convert_analog_digital(self, value):

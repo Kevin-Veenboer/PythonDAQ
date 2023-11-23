@@ -20,4 +20,4 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry.scripts]
 view_experiment = "pythondaq.views.view:main"
-py_cli = "pythondaq.views.cli:cmd_group"
+pydaq_cli = "pythondaq.views.cli:cmd_group"
