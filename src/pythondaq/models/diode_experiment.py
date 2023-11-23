@@ -1,5 +1,6 @@
 from pythondaq.controllers.arduino_device import list_devices, ArduinoVISADevice
 import numpy as np
+from rich.progress import track
 
 
 class DiodeExperiment:
@@ -56,7 +57,9 @@ class DiodeExperiment:
         stop_digital = device.convert_analog_digital(stop)
 
         # scan across the given experiment range
-        for output_val in range(start_digital, stop_digital + 1):
+        for output_val in track(
+            range(start_digital, stop_digital + 1), description="Running experiment..."
+        ):
             device.set_output_value(value=output_val)
 
             measurement_total_volt = []
