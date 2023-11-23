@@ -11,6 +11,9 @@ matplotlib = "^3.8.1"
 pyvisa-py = "^0.7.1"
 pyserial = "^3.5"
 click = "^8.1.7"
+mkdocs = "^1.5.3"
+mkdocstrings = {extras = ["python"], version = "^0.24.0"}
+mkdocs-material = "^9.4.10"
 
 
 [build-system]
