@@ -2,3 +2,13 @@ site_name: PythonDAQ documentation
 
 theme:
   name: "material"
+
+plugins:
+  - mkdocstrings
+
+nav:
+ - Home: index.md
+ - Command-line interface: cli.md
+ - Model: model.md
+ - Controller: controller.md
+ - Example usage: examples.md
