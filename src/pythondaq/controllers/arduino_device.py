@@ -24,7 +24,7 @@ class ArduinoVISADevice:
     def get_identification(self) -> None:
         try:
             print(self.device.query("*IDN?"))
-        except pyvisa.errors.VisaIOError():
+        except pyvisa.errors.VisaIOError:
             print(
                 "The device at the given port does not respond to this query please try anoher port"
             )
