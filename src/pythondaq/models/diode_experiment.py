@@ -3,29 +3,46 @@ import numpy as np
 
 
 class DiodeExperiment:
-    # Initialize the lists for storing results
+    """This class allows users to run their diode experiment"""
+
     def __init__(self) -> None:
-        # Clear method called to initialize the list for storing data
+        """Creates an instance of the DiodeExperiment class and runs the clear()-method to initialize the lists where data is stored."""
         self.clear()
 
     def device_info(self, port):
+        """Gets the identification string of the device
+
+        Args:
+            port (string): port of the device from which info is requested
+
+        Returns:
+            string: identification string of device at requested port
+        """
         return ArduinoVISADevice(port=port).get_identification()
 
     def get_connected_devices(self):
+        """Lists connected devices
+
+        Returns:
+            list: a list containing the ports of the connected devices
+        """
         return list_devices()
 
     # Method to start an experiment
     def scan(
         self, port, start=0.0, stop=3.3, resistor_load=220, sample_size=5
     ) -> tuple:
-        """
-        This function is used to start a U,I-experiment with the LED. It makes sure to clear the old data and connects to the experiment controller.
-        It will scan over the entire range given with the start and stop parameters. For each value in this range it will take a sample.
-        The size of this sample can be altered with the sample_size parameter.
+        """Function to start an experiment with the diode
 
-        The function parameters are set by default but can be altered if the experiment setup is different.
+        Args:
+            port (string): port of the device controlling the experiment
+            start (float, optional): analog voltage at which the experiment starts. Defaults to 0.0.
+            stop (float, optional): analog voltage at which the experiment stops. Defaults to 3.3.
+            resistor_load (int, optional): resistance of the resistor in the experiment in ohm. Defaults to 220.
+            sample_size (int, optional): number of samples to take at each volatage level. Defaults to 5.
 
-        The function returns a tuple containing the experiment data. For details on the format of the data see the export_experiment_data method.
+        Returns:
+            tuple: tuple object containing a list of headers and a zip object containing the lists with the experiment data
         """
 
         # Make sure to clear the old results first
@@ -83,14 +100,14 @@ class DiodeExperiment:
     def add_measurement(
         self, R, total_volt, resistor_volt, total_volt_error, resistor_volt_error
     ) -> None:
-        """
-        This function is used to store the measured experiment data. First it stores the values that do not require calculation.
-        Then it contuinues by calculating the current, LED voltage and their errors. Finally it stores these values as well.
+        """Function to store measurements in the lists for experiment data
 
-        The function takes as parameters the resistor load, total volatage, resitor voltage, the error on the total voltage and
-        the error on the resistor voltage.
-
-        The function does not return a value
+        Args:
+            R (int): resistance of the resistor in the experiment in ohm
+            total_volt (float): total voltage drop across the experiment setup
+            resistor_volt (float): voltage drop across the resistor
+            total_volt_error (float): error on total voltage drop across the experiment setup
+            resistor_volt_error (float): error on voltage drop across the resistor
         """
 
         # make sure the load is not set to zero to avoid zero division errors
@@ -118,11 +135,10 @@ class DiodeExperiment:
         self.led_voltages_errors.append(led_volt_error)
 
     def export_experiment_data(self) -> tuple:
-        """
-        This funcion exports the data stored in an instance of the DiodeExperiment class. It returns a tuple containing two objects.
-        The first object is a list containing headers for the data, this can be used to easily store the data in something like a CSV file.
-        The second object is a zip object of all the lists that contain the data from the DiodeExperiment instance.
-        The headers are in the same order as the data lists are zipped.
+        """Function to export the stored experiment data
+
+        Returns:
+            tuple: tuple object containing a list of headers and a zip object containing the lists with the experiment data
         """
 
         headers = [
@@ -152,6 +168,7 @@ class DiodeExperiment:
 
     # Method to clear the stored data
     def clear(self) -> None:
+        """This function clears lists containing the experiment data"""
         self.resistor_loads = []
         self.total_voltages = []
         self.total_voltages_errors = []

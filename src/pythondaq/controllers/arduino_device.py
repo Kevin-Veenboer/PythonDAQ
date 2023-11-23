@@ -1,6 +1,6 @@
 import pyvisa
 
-# Function to display devices
+
 def list_devices():
     """This function shows which devices are connected
 
@@ -27,18 +27,17 @@ class ArduinoVISADevice:
             port, read_termination="\r\n", write_termination="\n"
         )
 
-    # Method to get device identification string
     def get_identification(self) -> None:
         """Prints the identification string of the device"""
         try:
             print(self.device.query("*IDN?"))
+
         # If the request is made to a device which does not support this query then handle the error
         except pyvisa.errors.VisaIOError:
             print(
                 "The device at the given port does not respond to this query please try anoher port"
             )
 
-    # Defining conversion functions
     def convert_analog_digital(self, value):
         """Converts an analog value to digital value
 
