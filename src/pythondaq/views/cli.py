@@ -18,14 +18,28 @@ def cmd_group():
     help="only return devices which match with given search value",
     show_default=True,
 )
-def click_list(search):
+def click_list(search=None):
+    """Function that prints a list of the connected devices
+
+    Args:
+        search (string, optional): search term to match connected devices to. Defaults to None.
+    """
     list_devices(search, display=True)
 
 
-def list_devices(search, display=False):
+def list_devices(search=None, display=False):
+    """Function that prints a list of the connected devices
+
+    Args:
+        search (string, optional): search term to match connected devices to. Defaults to None.
+        display (bool, optional): flag to toggle printing the device list. Defaults to False.
+
+    Returns:
+        list: list containing the ports of connected devices
+    """
     if not search:
         print(DiodeExperiment().get_connected_devices())
-        return
+        return DiodeExperiment().get_connected_devices()
     else:
         matching = []
         for device in DiodeExperiment().get_connected_devices():
@@ -47,6 +61,11 @@ def list_devices(search, display=False):
     show_default=None,
 )
 def info(port):
+    """Function that requests the identification string from a device
+
+    Args:
+        port (string): port of a connected device. Partial ports are attempted to be matched.
+    """
     if not port:
         print("No device port was given")
 
@@ -98,6 +117,16 @@ def info(port):
 )
 @click.argument("port", type=str)
 def scan(port, begin, end, output, graph, number):
+    """Function that starts an experiment
+
+    Args:
+        port (string): port of the experiment controller device. Partial ports are attempted to be matched.
+        begin (float): analog voltage at which the experiment starts. Defaults to 0.0.
+        end (float): analog voltage at which the experiment stops. Defaults to 3.3.
+        output (string): path at which data should be stored. Defaults to None.
+        graph (bool): flag variable to determine whether output needs to be plotted. Defaults to False.
+        number (int): number of samples to take at each voltage level. Defaults to 5.
+    """
     assert begin <= end, "Cannot have the begin value be greater then the end value"
     assert number > 0, "Cannot have a sample size of less then one"
 
