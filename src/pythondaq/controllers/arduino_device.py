@@ -111,3 +111,6 @@ class ArduinoVISADevice:
             return self.convert_digital_analog(int(self.device.query("MEAS:CH1?")))
         else:
             return self.convert_digital_analog(int(self.device.query("MEAS:CH2?")))
+
+    def close_connection(self):
+        self.device.close()
