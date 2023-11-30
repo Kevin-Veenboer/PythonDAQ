@@ -63,10 +63,10 @@ class UserInterface(QtWidgets.QMainWindow):
 
         # Create Vbox for start and save button
         self.button_box = QtWidgets.QVBoxLayout()
-        self.start_button_label = QtWidgets.QLabel("")
+        self.save_button = QtWidgets.QPushButton("save")
         self.start_button = QtWidgets.QPushButton("start")
-        self.start_button_box.addWidget(self.start_button_label)
-        self.start_button_box.addWidget(self.start_button)
+        self.button_box.addWidget(self.save_button)
+        self.button_box.addWidget(self.start_button)
 
         # Add boxes to hbox
         hbox.addLayout(self.start_box)
@@ -76,6 +76,13 @@ class UserInterface(QtWidgets.QMainWindow):
 
         # plot data on button click
         self.start_button.clicked.connect(self.run_measurement)
+        self.save_button.clicked.connect(self.save_data)
+
+        # Initialize data lists (otherwise running save before start throws an error)
+        self.led_volts = []
+        self.led_volt_errors = []
+        self.currents = []
+        self.current_errors = []
 
     @Slot()
     def run_measurement(self):
@@ -90,7 +97,7 @@ class UserInterface(QtWidgets.QMainWindow):
             sample_size=self.sample_input.value(),
         )
 
-        # Create lists to extract LED Volt and Current plus their errors
+        # Clear lists to extract LED Volt and Current plus their errors
         self.led_volts = []
         self.led_volt_errors = []
         self.currents = []
@@ -107,17 +114,19 @@ class UserInterface(QtWidgets.QMainWindow):
             current_error,
             _,
         ) in data:
-            led_volts.append(led_volt)
-            led_volt_errors.append(led_volt_error)
-            currents.append(current)
-            current_errors.append(current_error)
+            self.led_volts.append(led_volt)
+            self.led_volt_errors.append(led_volt_error)
+            self.currents.append(current)
+            self.current_errors.append(current_error)
 
-        self.plot_window.plot(led_volts, currents, symbol="o", symbolSize=5, pen=None)
+        self.plot_window.plot(
+            self.led_volts, self.currents, symbol="o", symbolSize=5, pen=None
+        )
         error_items = pg.ErrorBarItem(
-            x=np.array(led_volts),
-            y=np.array(currents),
-            width=2 * np.array(led_volt_errors),
-            height=2 * np.array(current_errors),
+            x=np.array(self.led_volts),
+            y=np.array(self.currents),
+            width=2 * np.array(self.led_volt_errors),
+            height=2 * np.array(self.current_errors),
         )
 
         self.plot_window.addItem(error_items)
@@ -127,6 +136,14 @@ class UserInterface(QtWidgets.QMainWindow):
 
     def save_data(self):
         file_name, _ = QtWidgets.QFileDialog.getSaveFileName(filter="CSV files (*.csv)")
+        pd.DataFrame(
+            {
+                "Volt (V)": self.led_volts,
+                "Volt error (V)": self.led_volt_errors,
+                "Current (A)": self.currents,
+                "Current error (A)": self.current_errors,
+            }
+        ).to_csv(file_name, index=False)
 
 
 def main():
