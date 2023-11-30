@@ -96,6 +96,9 @@ class DiodeExperiment:
         # After the experiment we turn the LED off
         device.set_output_value(value=0)
 
+        # After experiment we close the connection to the controller
+        device.close_connection()
+
         # Return the experiment data
         return self.export_experiment_data()
 
