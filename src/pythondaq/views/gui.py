@@ -1,7 +1,8 @@
 import sys
 
 from PySide6 import QtWidgets
-from PySide6.QtCore import Slot
+from PySide6.QtCore import Slot, Qt
+from PySide6.QtGui import QAction, QIcon
 import pyqtgraph as pg
 from pythondaq.models.diode_experiment import DiodeExperiment
 import numpy as np
@@ -16,6 +17,8 @@ pg.setConfigOption("foreground", "k")
 class UserInterface(QtWidgets.QMainWindow):
     def __init__(self):
         super().__init__()
+        self._createActions()
+        self._createMenubar()
 
         # Create plot widget
         self.plot_window = pg.PlotWidget()
@@ -143,6 +146,7 @@ class UserInterface(QtWidgets.QMainWindow):
         self.plot_window.setLabel("left", "Current (A)")
         self.plot_window.setLabel("bottom", "Volt (V)")
 
+    @Slot()
     def save_data(self):
         file_name, _ = QtWidgets.QFileDialog.getSaveFileName(filter="CSV files (*.csv)")
         pd.DataFrame(
@@ -153,6 +157,22 @@ class UserInterface(QtWidgets.QMainWindow):
                 "Current error (A)": self.current_errors,
             }
         ).to_csv(file_name, index=False)
+
+    def _createMenubar(self):
+        menubar = self.menuBar()
+        filemenu = QtWidgets.QMenu("File", self)
+        menubar.addMenu(filemenu)
+        filemenu.addAction(self.open_action)
+        filemenu.addAction(self.save_action)
+        filemenu.addSeparator()
+        filemenu.addAction(self.exit_action)
+
+    def _createActions(self):
+        self.open_action = QAction("&Open", self)
+        self.save_action = QAction("&Save", self)
+        self.save_action.triggered.connect(self.save_data)
+        self.exit_action = QAction("&Exit", self)
+        self.exit_action.triggered.connect(self.close)
 
 
 def main():
