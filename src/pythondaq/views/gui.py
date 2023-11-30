@@ -68,10 +68,19 @@ class UserInterface(QtWidgets.QMainWindow):
         self.button_box.addWidget(self.save_button)
         self.button_box.addWidget(self.start_button)
 
+        # Create Vbox for device selection
+        self.device_box = QtWidgets.QVBoxLayout()
+        device_label = QtWidgets.QLabel("Device")
+        self.device_selection = QtWidgets.QComboBox()
+        self.device_selection.addItems(DiodeExperiment().get_connected_devices())
+        self.device_box.addWidget(device_label)
+        self.device_box.addWidget(self.device_selection)
+
         # Add boxes to hbox
         hbox.addLayout(self.start_box)
         hbox.addLayout(self.stop_box)
         hbox.addLayout(self.sample_box)
+        hbox.addLayout(self.device_box)
         hbox.addLayout(self.button_box)
 
         # plot data on button click
@@ -91,7 +100,7 @@ class UserInterface(QtWidgets.QMainWindow):
 
         # Get data
         headers, data = DiodeExperiment().scan(
-            port="ASRL5::INSTR",
+            port=self.device_selection.currentText(),
             start=self.start_input.value(),
             stop=self.stop_input.value(),
             sample_size=self.sample_input.value(),
