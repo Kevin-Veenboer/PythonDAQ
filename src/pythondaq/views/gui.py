@@ -19,6 +19,7 @@ class UserInterface(QtWidgets.QMainWindow):
         super().__init__()
         self._createActions()
         self._createMenubar()
+        self._createStatusBar()
 
         # Create plot widget
         self.plot_window = pg.PlotWidget()
@@ -173,6 +174,9 @@ class UserInterface(QtWidgets.QMainWindow):
         self.save_action.triggered.connect(self.save_data)
         self.exit_action = QAction("&Exit", self)
         self.exit_action.triggered.connect(self.close)
+
+    def _createStatusBar(self):
+        self.statusbar = self.statusBar()
 
 
 def main():
