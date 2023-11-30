@@ -5,6 +5,7 @@ from PySide6.QtCore import Slot
 import pyqtgraph as pg
 from pythondaq.models.diode_experiment import DiodeExperiment
 import numpy as np
+import pandas as pd
 
 
 # PyQtGraph global options
@@ -60,8 +61,8 @@ class UserInterface(QtWidgets.QMainWindow):
         self.sample_box.addWidget(sample_label)
         self.sample_box.addWidget(self.sample_input)
 
-        # Create Vbox for starting
-        self.start_button_box = QtWidgets.QVBoxLayout()
+        # Create Vbox for start and save button
+        self.button_box = QtWidgets.QVBoxLayout()
         self.start_button_label = QtWidgets.QLabel("")
         self.start_button = QtWidgets.QPushButton("start")
         self.start_button_box.addWidget(self.start_button_label)
@@ -71,7 +72,7 @@ class UserInterface(QtWidgets.QMainWindow):
         hbox.addLayout(self.start_box)
         hbox.addLayout(self.stop_box)
         hbox.addLayout(self.sample_box)
-        hbox.addLayout(self.start_button_box)
+        hbox.addLayout(self.button_box)
 
         # plot data on button click
         self.start_button.clicked.connect(self.run_measurement)
@@ -90,10 +91,10 @@ class UserInterface(QtWidgets.QMainWindow):
         )
 
         # Create lists to extract LED Volt and Current plus their errors
-        led_volts = []
-        led_volt_errors = []
-        currents = []
-        current_errors = []
+        self.led_volts = []
+        self.led_volt_errors = []
+        self.currents = []
+        self.current_errors = []
 
         for (
             _,
