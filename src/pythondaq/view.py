@@ -2,7 +2,7 @@ import sys
 
 import numpy as np
 
-from PySide6 import QtWidgets
+from PySide6 import QtWidgets, QtCore
 import pyqtgraph as pg
 
 from pythondaq.model import Experiment
@@ -21,16 +21,26 @@ class UserInterface(QtWidgets.QMainWindow):
         start_button = QtWidgets.QPushButton("Start")
         vbox.addWidget(start_button)
 
-        start_button.clicked.connect(self.plot)
+        start_button.clicked.connect(self.start_scan)
+
+        # Plot Timer
+        self.plot_timer = QtCore.QTimer()
+        # Roep plot function ieder 100ms aan
+        self.plot_timer.timeout.connect(self.plot)
+        self.plot_timer.start(100)
 
         # Maak een instance aan van Experiment
         self.experiment = Experiment()
 
+    def start_scan(self):
+        self.experiment.start_scan(0, np.pi, 50)
+
     def plot(self):
         """Clear the plot widget and display experimental data."""
         self.plot_widget.clear()
-        x, y = self.experiment.scan(0, np.pi, 50)
-        self.plot_widget.plot(x, y, symbol="o", symbolSize=5, pen=None)
+        self.plot_widget.plot(
+            self.experiment.x, self.experiment.y, symbol="o", symbolSize=5, pen=None
+        )
 
 
 def main():
