@@ -1,6 +1,7 @@
 from pythondaq.controllers.arduino_device import list_devices, ArduinoVISADevice
 import numpy as np
 from rich.progress import track
+import threading
 
 
 class DiodeExperiment:
@@ -29,10 +30,15 @@ class DiodeExperiment:
         """
         return list_devices()
 
+    def start_scan(self, port, start=0.0, stop=3.3, resistor_load=220, sample_size=5):
+        self._scan_thread = threading.Thread(
+            target=self.scan,
+            args=(port, start, stop, resistor_load, sample_size),
+        )
+        self._scan_thread.start()
+
     # Method to start an experiment
-    def scan(
-        self, port, start=0.0, stop=3.3, resistor_load=220, sample_size=5
-    ) -> tuple:
+    def scan(self, port, start, stop, resistor_load, sample_size) -> tuple:
         """Function to start an experiment with the diode
 
         Args:

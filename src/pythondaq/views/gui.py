@@ -1,8 +1,8 @@
 import sys
 
 from PySide6 import QtWidgets
-from PySide6.QtCore import Slot, Qt
-from PySide6.QtGui import QAction, QIcon
+from PySide6.QtCore import Slot, QTimer
+from PySide6.QtGui import QAction
 import pyqtgraph as pg
 from pythondaq.models.diode_experiment import DiodeExperiment
 import numpy as np
@@ -20,6 +20,9 @@ class UserInterface(QtWidgets.QMainWindow):
         self._createActions()
         self._createMenubar()
         self._createStatusBar()
+
+        # create a model connection
+        self.experiment = DiodeExperiment()
 
         # Create plot widget
         self.plot_window = pg.PlotWidget()
@@ -87,6 +90,11 @@ class UserInterface(QtWidgets.QMainWindow):
         hbox.addLayout(self.device_box)
         hbox.addLayout(self.button_box)
 
+        # Create plot timer that plots every 100ms
+        self.plot_timer = QTimer()
+        self.plot_timer.timeout.connect(self.plot)
+        self.plot_timer.start(100)
+
         # plot data on button click
         self.start_button.clicked.connect(self.run_measurement)
         self.save_button.clicked.connect(self.save_data)
@@ -100,56 +108,40 @@ class UserInterface(QtWidgets.QMainWindow):
     @Slot()
     def run_measurement(self):
         try:
-            # Clear old results
-            self.plot_window.clear()
-
-            # Get data
-            headers, data = DiodeExperiment().scan(
+            self.experiment.start_scan(
                 port=self.device_selection.currentText(),
                 start=self.start_input.value(),
                 stop=self.stop_input.value(),
                 sample_size=self.sample_input.value(),
             )
 
-            # Clear lists to extract LED Volt and Current plus their errors
-            self.led_volts = []
-            self.led_volt_errors = []
-            self.currents = []
-            self.current_errors = []
-
-            for (
-                _,
-                _,
-                _,
-                _,
-                led_volt,
-                led_volt_error,
-                current,
-                current_error,
-                _,
-            ) in data:
-                self.led_volts.append(led_volt)
-                self.led_volt_errors.append(led_volt_error)
-                self.currents.append(current)
-                self.current_errors.append(current_error)
-
-            self.plot_window.plot(
-                self.led_volts, self.currents, symbol="o", symbolSize=5, pen=None
-            )
-            error_items = pg.ErrorBarItem(
-                x=np.array(self.led_volts),
-                y=np.array(self.currents),
-                width=2 * np.array(self.led_volt_errors),
-                height=2 * np.array(self.current_errors),
-            )
-
-            self.plot_window.addItem(error_items)
-
-            self.plot_window.setLabel("left", "Current (A)")
-            self.plot_window.setLabel("bottom", "Volt (V)")
-
-        except:
+        except Exception as err:
+            print(err)
             self.create_pop_up("The selected device is not functional")
+
+    def plot(self):
+        # Clear old results
+        self.plot_window.clear()
+
+        # Plot new result
+        self.plot_window.plot(
+            self.experiment.led_voltages,
+            self.experiment.currents,
+            symbol="o",
+            symbolSize=5,
+            pen=None,
+        )
+        error_items = pg.ErrorBarItem(
+            x=np.array(self.experiment.led_voltages),
+            y=np.array(self.experiment.currents),
+            width=2 * np.array(self.experiment.led_voltages_errors),
+            height=2 * np.array(self.experiment.currents_errors),
+        )
+
+        self.plot_window.addItem(error_items)
+
+        self.plot_window.setLabel("left", "Current (A)")
+        self.plot_window.setLabel("bottom", "Volt (V)")
 
     @Slot()
     def save_data(self):
