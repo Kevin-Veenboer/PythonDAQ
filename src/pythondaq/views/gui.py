@@ -107,17 +107,22 @@ class UserInterface(QtWidgets.QMainWindow):
 
     @Slot()
     def run_measurement(self):
-        try:
-            self.experiment.start_scan(
-                port=self.device_selection.currentText(),
-                start=self.start_input.value(),
-                stop=self.stop_input.value(),
-                sample_size=self.sample_input.value(),
-            )
+        if not self.experiment.is_scanning.is_set():
+            try:
+                self.start_button.setEnabled(False)
+                self.experiment.start_scan(
+                    port=self.device_selection.currentText(),
+                    start=self.start_input.value(),
+                    stop=self.stop_input.value(),
+                    sample_size=self.sample_input.value(),
+                )
 
-        except Exception as err:
-            print(err)
-            self.create_pop_up("The selected device is not functional")
+            except Exception as err:
+                print(err)
+                self.create_pop_up("The selected device is not functional")
+
+            finally:
+                self.start_button.setEnabled(True)
 
     def plot(self):
         # Clear old results

@@ -11,6 +11,9 @@ class DiodeExperiment:
         """Creates an instance of the DiodeExperiment class and runs the clear()-method to initialize the lists where data is stored."""
         self.clear()
 
+        # Make an Event to lock the scan method
+        self.is_scanning = threading.Event()
+
     def device_info(self, port):
         """Gets the identification string of the device
 
@@ -54,6 +57,8 @@ class DiodeExperiment:
         Returns:
             tuple: tuple object containing a list of headers and a zip object containing the lists with the experiment data
         """
+        # Update threading Event
+        self.is_scanning.set()
 
         # Make sure to clear the old results first
         self.clear()
@@ -107,6 +112,9 @@ class DiodeExperiment:
 
         # After experiment we close the connection to the controller
         device.close_connection()
+
+        # Update threading Event
+        self.is_scanning.clear()
 
         # Return the experiment data
         return self.export_experiment_data()
