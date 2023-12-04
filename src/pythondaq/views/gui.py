@@ -99,53 +99,57 @@ class UserInterface(QtWidgets.QMainWindow):
 
     @Slot()
     def run_measurement(self):
-        # Clear old results
-        self.plot_window.clear()
+        try:
+            # Clear old results
+            self.plot_window.clear()
 
-        # Get data
-        headers, data = DiodeExperiment().scan(
-            port=self.device_selection.currentText(),
-            start=self.start_input.value(),
-            stop=self.stop_input.value(),
-            sample_size=self.sample_input.value(),
-        )
+            # Get data
+            headers, data = DiodeExperiment().scan(
+                port=self.device_selection.currentText(),
+                start=self.start_input.value(),
+                stop=self.stop_input.value(),
+                sample_size=self.sample_input.value(),
+            )
 
-        # Clear lists to extract LED Volt and Current plus their errors
-        self.led_volts = []
-        self.led_volt_errors = []
-        self.currents = []
-        self.current_errors = []
+            # Clear lists to extract LED Volt and Current plus their errors
+            self.led_volts = []
+            self.led_volt_errors = []
+            self.currents = []
+            self.current_errors = []
 
-        for (
-            _,
-            _,
-            _,
-            _,
-            led_volt,
-            led_volt_error,
-            current,
-            current_error,
-            _,
-        ) in data:
-            self.led_volts.append(led_volt)
-            self.led_volt_errors.append(led_volt_error)
-            self.currents.append(current)
-            self.current_errors.append(current_error)
+            for (
+                _,
+                _,
+                _,
+                _,
+                led_volt,
+                led_volt_error,
+                current,
+                current_error,
+                _,
+            ) in data:
+                self.led_volts.append(led_volt)
+                self.led_volt_errors.append(led_volt_error)
+                self.currents.append(current)
+                self.current_errors.append(current_error)
 
-        self.plot_window.plot(
-            self.led_volts, self.currents, symbol="o", symbolSize=5, pen=None
-        )
-        error_items = pg.ErrorBarItem(
-            x=np.array(self.led_volts),
-            y=np.array(self.currents),
-            width=2 * np.array(self.led_volt_errors),
-            height=2 * np.array(self.current_errors),
-        )
+            self.plot_window.plot(
+                self.led_volts, self.currents, symbol="o", symbolSize=5, pen=None
+            )
+            error_items = pg.ErrorBarItem(
+                x=np.array(self.led_volts),
+                y=np.array(self.currents),
+                width=2 * np.array(self.led_volt_errors),
+                height=2 * np.array(self.current_errors),
+            )
 
-        self.plot_window.addItem(error_items)
+            self.plot_window.addItem(error_items)
 
-        self.plot_window.setLabel("left", "Current (A)")
-        self.plot_window.setLabel("bottom", "Volt (V)")
+            self.plot_window.setLabel("left", "Current (A)")
+            self.plot_window.setLabel("bottom", "Volt (V)")
+
+        except:
+            self.create_pop_up("The selected device is not functional")
 
     @Slot()
     def save_data(self):
@@ -158,6 +162,12 @@ class UserInterface(QtWidgets.QMainWindow):
                 "Current error (A)": self.current_errors,
             }
         ).to_csv(file_name, index=False)
+
+    def create_pop_up(self, message):
+        pop_up = QtWidgets.QMessageBox()
+        pop_up.setText(message)
+        pop_up.setIcon(QtWidgets.QMessageBox.Icon.Critical)
+        pop_up.exec()
 
     def _createMenubar(self):
         menubar = self.menuBar()
