@@ -37,6 +37,15 @@ class DiodeExperiment:
         return list_devices()
 
     def start_scan(self, port, start=0.0, stop=3.3, resistor_load=220, sample_size=5):
+        """Function that runs the scan method as a seperate thread
+
+        Args:
+            port (string): port of the device controlling the experiment
+            start (float, optional): analog voltage at which the experiment starts. Defaults to 0.0.
+            stop (float, optional): analog voltage at which the experiment stops. Defaults to 3.3.
+            resistor_load (int, optional): resistance of the resistor in the experiment in ohm. Defaults to 220.
+            sample_size (int, optional): number of samples to take at each volatage level. Defaults to 5.
+        """
         self._scan_thread = threading.Thread(
             target=self.scan,
             args=(port, start, stop, resistor_load, sample_size),
@@ -45,7 +54,7 @@ class DiodeExperiment:
 
     # Method to start an experiment
     def scan(self, port, start, stop, resistor_load, sample_size) -> tuple:
-        """Function to start an experiment with the diode
+        """Function to start an experiment with the diode and store the results of the experiment
 
         Args:
             port (string): port of the device controlling the experiment

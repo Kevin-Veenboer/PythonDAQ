@@ -15,7 +15,10 @@ pg.setConfigOption("foreground", "k")
 
 
 class UserInterface(QtWidgets.QMainWindow):
+    """Class to usde to create a UserInterface for the experiment view"""
+
     def __init__(self):
+        """This method intializes the UI"""
         super().__init__()
         self._createActions()
         self._createMenubar()
@@ -107,6 +110,7 @@ class UserInterface(QtWidgets.QMainWindow):
 
     @Slot()
     def run_measurement(self):
+        """Method used to start an experiment"""
         if not self.experiment.is_scanning.is_set():
             try:
                 self.start_button.setEnabled(False)
@@ -125,6 +129,10 @@ class UserInterface(QtWidgets.QMainWindow):
                 self.start_button.setEnabled(True)
 
     def plot(self):
+        """Method used to plot the results of a running experiment.
+
+        This method will only print results while an experiment is running
+        """
         if self.experiment.is_scanning.is_set():
             # Clear old results
             self.plot_window.clear()
@@ -151,23 +159,30 @@ class UserInterface(QtWidgets.QMainWindow):
 
     @Slot()
     def save_data(self):
+        """Method used to save the experiment data"""
         file_name, _ = QtWidgets.QFileDialog.getSaveFileName(filter="CSV files (*.csv)")
         pd.DataFrame(
             {
-                "Volt (V)": self.led_volts,
-                "Volt error (V)": self.led_volt_errors,
-                "Current (A)": self.currents,
-                "Current error (A)": self.current_errors,
+                "Volt (V)": self.experiment.led_voltages,
+                "Volt error (V)": self.experiment.led_voltages_errors,
+                "Current (A)": self.experiment.currents,
+                "Current error (A)": self.experiment.currents_errors,
             }
         ).to_csv(file_name, index=False)
 
     def create_pop_up(self, message):
+        """Method to create a warning pop-up
+
+        Args:
+            message (str): Warning message to be displayed
+        """
         pop_up = QtWidgets.QMessageBox()
         pop_up.setText(message)
         pop_up.setIcon(QtWidgets.QMessageBox.Icon.Critical)
         pop_up.exec()
 
     def _createMenubar(self):
+        """Method to create menu bars"""
         menubar = self.menuBar()
         filemenu = QtWidgets.QMenu("File", self)
         menubar.addMenu(filemenu)
@@ -177,6 +192,7 @@ class UserInterface(QtWidgets.QMainWindow):
         filemenu.addAction(self.exit_action)
 
     def _createActions(self):
+        """Method to create actions"""
         self.open_action = QAction("&Open", self)
         self.save_action = QAction("&Save", self)
         self.save_action.triggered.connect(self.save_data)
@@ -188,6 +204,7 @@ class UserInterface(QtWidgets.QMainWindow):
 
 
 def main():
+    """Main function initializing the app"""
     app = QtWidgets.QApplication(sys.argv)
     ui = UserInterface()
     ui.show()
