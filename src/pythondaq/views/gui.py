@@ -125,28 +125,29 @@ class UserInterface(QtWidgets.QMainWindow):
                 self.start_button.setEnabled(True)
 
     def plot(self):
-        # Clear old results
-        self.plot_window.clear()
+        if self.experiment.is_scanning.is_set():
+            # Clear old results
+            self.plot_window.clear()
 
-        # Plot new result
-        self.plot_window.plot(
-            self.experiment.led_voltages,
-            self.experiment.currents,
-            symbol="o",
-            symbolSize=5,
-            pen=None,
-        )
-        error_items = pg.ErrorBarItem(
-            x=np.array(self.experiment.led_voltages),
-            y=np.array(self.experiment.currents),
-            width=2 * np.array(self.experiment.led_voltages_errors),
-            height=2 * np.array(self.experiment.currents_errors),
-        )
+            # Plot new result
+            self.plot_window.plot(
+                self.experiment.led_voltages,
+                self.experiment.currents,
+                symbol="o",
+                symbolSize=5,
+                pen=None,
+            )
+            error_items = pg.ErrorBarItem(
+                x=np.array(self.experiment.led_voltages),
+                y=np.array(self.experiment.currents),
+                width=2 * np.array(self.experiment.led_voltages_errors),
+                height=2 * np.array(self.experiment.currents_errors),
+            )
 
-        self.plot_window.addItem(error_items)
+            self.plot_window.addItem(error_items)
 
-        self.plot_window.setLabel("left", "Current (A)")
-        self.plot_window.setLabel("bottom", "Volt (V)")
+            self.plot_window.setLabel("left", "Current (A)")
+            self.plot_window.setLabel("bottom", "Volt (V)")
 
     @Slot()
     def save_data(self):
