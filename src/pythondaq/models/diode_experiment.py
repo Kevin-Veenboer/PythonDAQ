@@ -20,7 +20,10 @@ class DiodeExperiment:
         Returns:
             string: identification string of device at requested port
         """
-        return ArduinoVISADevice(port=port).get_identification()
+        device = ArduinoVISADevice(port=port)
+        identification = device.get_identification()
+        device.close_connection()
+        return identification
 
     def get_connected_devices(self):
         """Lists connected devices
